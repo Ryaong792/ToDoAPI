@@ -48,6 +48,7 @@ class ExamplesController < OpenReadController
 
   def set_example
     @example = current_user.examples.find(params[:id])
+    # example = Example.find[params[:id]]
   end
 
   def example_params
