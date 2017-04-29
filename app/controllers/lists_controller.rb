@@ -1,9 +1,9 @@
-class ListsController < ApplicationController
+class ListsController < ProtectedController
   before_action :set_list, only: [:show, :update, :destroy]
 
   # GET /lists
   def index
-    @lists = List.all
+    @lists = current_user.lists
 
     render json: @lists
   end
@@ -35,7 +35,11 @@ class ListsController < ApplicationController
 
   # DELETE /lists/1
   def destroy
-    @list.destroy
+    if @list.destroy
+      render json: {id: @list.id}
+    else
+      render json: {id: @list.id}, status: :unprocessable_entity
+    end
   end
 
   private
@@ -46,6 +50,6 @@ class ListsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def list_params
-      params.require(:list).permit(:user_id, :name, :completed)
+      params.require(:list).permit(:name, :completed)
     end
 end
