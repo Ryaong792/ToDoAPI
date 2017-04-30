@@ -56,7 +56,7 @@ class TasksController < ProtectedController
   end
 
   def destroy
-    @task = List.joins(:tasks).where(tasks: {id: params[:id]}, lists: {user_id: current_user.id})
+    @task = Task.joins(:list).where(lists: {user_id: current_user.id, id: params[:list_id]}).find_by(tasks: {id: params[:id]})
 
     if @task.destroy
       render json: {id: @task.id}
