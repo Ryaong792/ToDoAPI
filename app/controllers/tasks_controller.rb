@@ -46,7 +46,7 @@ class TasksController < ProtectedController
 
 
   def update
-    @task = Task.joins(:list).where(lists: {user_id: current_user.id}, tasks: {id: params[:id]})
+    @task = Task.joins(:list).where(lists: {user_id: current_user.id}).find(params[:id])
     # @task = List.joins(:tasks).where(tasks: {id: params[:id]}, lists: {user_id: current_user.id})
 
     if @task.update_attributes(task_params)
