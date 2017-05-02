@@ -46,7 +46,8 @@ class TasksController < ProtectedController
 
 
   def update
-    @task = List.joins(:tasks).where(tasks: {id: params[:id]}, lists: {user_id: current_user.id})
+    @task = Task.joins(:list).where(lists: {user_id: current_user.id}, tasks: {id: params[:id]})
+    # @task = List.joins(:tasks).where(tasks: {id: params[:id]}, lists: {user_id: current_user.id})
 
     if @task.update_attributes(task_params)
       render json: @task
@@ -57,7 +58,6 @@ class TasksController < ProtectedController
 
   def destroy
     @task = Task.joins(:list).where(lists: {user_id: current_user.id, id: params[:list_id]}).find_by(tasks: {id: params[:id]})
-
     if @task.destroy
       render json: {id: @task.id}
     else
